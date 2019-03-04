@@ -133,7 +133,7 @@ clk_counter_i:clk_counter     PORT MAP(
 
 -- clk_counter modul koji ce se iskoristiti za generisanje takta od 100Hz
 clk_counter_100Hz_i:clk_counter GENERIC MAP(
-                                             max_cnt => -- DODATI KONSTANTU
+                                             max_cnt => "00000001111010000100100000" -- DODATI KONSTANTU 500000
                                            )
                                 PORT MAP(
                                          clk_i     => clk_50MHz_s   ,
@@ -150,7 +150,9 @@ debouncer1_i:debouncer          PORT MAP(
                                           rst_i                             => rst_locked_s  ,
                                           pb_debounced_one_pulse_o => open                   ,  
                                           pb_debounced_o                    => button_min_s
+														--pb_debounced_o                    => open
                                          );
+													  --button_min_s <= in_btn(0);
                                 
 debouncer2_i:debouncer          PORT MAP(
                                           pb_i                              => in_btn(1)     , -- za sate
@@ -158,7 +160,9 @@ debouncer2_i:debouncer          PORT MAP(
                                           rst_i                             => rst_locked_s  ,
                                           pb_debounced_one_pulse_o => open                   ,
                                           pb_debounced_o                => button_hour_s
+														--pb_debounced_o                    => open
                                          );
+													  --button_hour_s <= in_btn(1);
 
 timer_counter_i:timer_counter PORT MAP(
                                        clk_i     => clk_50MHz_s   ,

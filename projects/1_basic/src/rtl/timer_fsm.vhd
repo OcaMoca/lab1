@@ -37,5 +37,38 @@ BEGIN
 -- DODATI :
 -- automat sa konacnim brojem stanja koji upravlja brojanjem sekundi na osnovu stanja prekidaca
 
+process(clk_i, rst_i)begin
+	if rst_i = '1' then
+		current_state <= IDLE;
+	elsif rising_edge(clk_i) then
+		current_state <= next_state;
+	end if;
+end process;
+
+
+process(current_state, reset_switch_i, start_switch_i, stop_switch_i, continue_switch_i)begin
+		next_state <= current_state;
+		case (current_state) is
+			when IDLE => 
+				if(reset_switch_i = '1') then next_state <= IDLE;
+				elsif(start_switch_i = '1') then next_state <= COUNT;
+				end if;
+			when COUNT =>
+				if(reset_switch_i = '1') then next_state <= IDLE;
+				elsif(stop_switch_i = '1') then next_state <= STOP;
+				end if;
+			when others =>
+				if(reset_switch_i = '1') then next_state <= IDLE;
+				elsif(continue_switch_i = '1') then next_state <= COUNT;
+				end if;
+			end case;
+end process;
+
+cnt_en_o <= '1' when (current_state = COUNT or current_state = IDLE) else '0';
+
+cnt_rst_o <= '1' when current_state = IDLE else '0';
+
+--cnt_en_o <= '1';
+--cnt_rst_o <= '0';
 
 END rtl;
